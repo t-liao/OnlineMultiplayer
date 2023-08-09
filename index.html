@@ -1,10 +1,60 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OnlineMultiplayer</title>
-</head>
-<body>
-    <p>OnlineMultiplayer</p>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>OnlineMultiplayerTesting</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        
+    </head>
+    <body>
+        
+        <div class="game-container"></div>
+        <div class="player-info">
+            <div>
+                <label for="player-name">Your Name</label>
+                <input id="player-name" maxlength="10" type="text" />
+            </div>
+            <div>
+                <button id="player-color">Change Color</button>
+            </div>
+        </div>
+
+        <div class="move-keys">
+            <button id="up key" class="up key">↑</button>
+            <div class="LRkey">
+                <button id="left key" class="left key">↑</button>
+                <button id="right key" class="right key">↑</button>
+            </div>
+            <button id="down key" class="down key">↑</button>
+        </div>
+        
+        <!-- , onAuthStateChanged, signInAnonymously -->
+
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+        <script>
+        
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+              apiKey: "AIzaSyBmdvekkQo6t8qeRTczEck5PLESXd8AdkY",
+              authDomain: "multiplayer-test-95a07.firebaseapp.com",
+              databaseURL: "https://multiplayer-test-95a07-default-rtdb.firebaseio.com",
+              projectId: "multiplayer-test-95a07",
+              storageBucket: "multiplayer-test-95a07.appspot.com",
+              messagingSenderId: "744631053850",
+              appId: "1:744631053850:web:69c41e3ef3056610bb2ba3"
+            };
+          
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            // const auth = getAuth(app);
+            // const db = getDatabase(app);
+        </script>
+        
+        <script src="/KeyPressListener.js"></script>
+        <script src="/script.js"></script>
+    </body>
 </html>
