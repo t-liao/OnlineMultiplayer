@@ -17,7 +17,7 @@
     position: relative;
     width: 320px;
     height: 240px;
-    background: url(/OnlineMultiplayer/images/map.png) no-repeat no-repeat;
+    background: url(images/map.png) no-repeat no-repeat;
     transform: scale(3);
     image-rendering: pixelated;
   }
@@ -98,14 +98,14 @@
     left: 5px;
     width: 7px;
     height: 5px;
-    background: url(/OnlineMultiplayer/images/arrow.png) no-repeat no-repeat;
+    background: url(images/arrow.png) no-repeat no-repeat;
   }
 
   /* nodged a bit above for floating */
   .Character_sprite {
     overflow: hidden;
     top: -3px;
-    background: url(/OnlineMultiplayer/images/characters.png);
+    background: url(images/characters.png);
   }
   .Character[data-direction="right"] .Character_sprite {
     background-position-x: 16px;
@@ -126,7 +126,7 @@
     background-position-y: -80px;
   }
   .Character_shadow {
-    background: url(/OnlineMultiplayer/images/shadow.png) no-repeat no-repeat;
+    background: url(images/shadow.png) no-repeat no-repeat;
   }
 
   .Character_name-container {
@@ -152,7 +152,7 @@
   
   /* Coins */
   .Coin_sprite {
-    background: url(/OnlineMultiplayer/images/coin.png) no-repeat no-repeat;
+    background: url(images/coin.png) no-repeat no-repeat;
     animation: coinFloat 0.8s linear infinite alternate-reverse;
   }
   @keyframes coinFloat {
@@ -160,7 +160,7 @@
     to { transform: translateY(5px) }
   }
   .Coin_shadow {
-    background: url(/OnlineMultiplayer/images/coin-shadow.png) no-repeat no-repeat;
+    background: url(images/coin-shadow.png) no-repeat no-repeat;
   }
 
   .move-keys {
