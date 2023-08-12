@@ -190,10 +190,10 @@ function getKeyString(x, y) {
 
     function handleRod() {
         let {xBob, yBob} = getRandomBobberSafeSpot()
-        // if (!players[playerId].rod){
-        //     xBob = players[playerId].x;
-        //     yBob = players[playerId].y;
-        // }
+        if (players[playerId].rod){
+            xBob = players[playerId].x;
+            yBob = players[playerId].y;
+        }
 
         playerRef.update({
             rod: !players[playerId].rod,
@@ -245,8 +245,7 @@ function getKeyString(x, y) {
                     Bel.querySelector('.bobber').style.display = 'none';
                     Bel.querySelector(".bobber").classList.remove('animate');
                 }
-                Bel.querySelector(".bobber").style.left = leftB;
-                Bel.querySelector(".bobber").style.top = topB;
+                Bel.style.transform = `translate3d(${leftB}, ${topB}, 0)`;
                 el.style.transform = `translate3d(${left}, ${top}, 0)`;
             })
 
@@ -299,9 +298,12 @@ function getKeyString(x, y) {
                 bobberElement.querySelector('.bobber').style.display = 'none';
                 bobberElement.querySelector(".bobber").classList.remove('animate');
             }
-            bobberElement.querySelector(".bobber").style.left = leftB;
-            bobberElement.querySelector(".bobber").style.top = topB;
+            bobberElement.style.position = 'absolute';
+            bobberElement.style.transition = 'transform 0.4s';
+            bobberElement.style.transform = `translate3d(${leftB}, ${topB}, 0)`;
+
             characterElement.style.transform = `translate3d(${left}, ${top}, 0)`;
+
             gameContainer.appendChild(characterElement);
             gameContainer.appendChild(bobberElement);
 
