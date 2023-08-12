@@ -46,7 +46,7 @@ function isSolid(x,y) {
       x >= mapData.maxX ||
       x < mapData.minX ||
       y >= mapData.maxY ||
-      y < mapData.minY
+      y < mapData.minY  
     )
 }
 
@@ -59,6 +59,20 @@ function getRandomSafeSpot() {
         return {x: randx, y: randy};
     } 
     return getRandomSafeSpot();
+}
+
+function getRandomBobberSafeSpot() {
+    const minBX = 3;
+    const maxBX = 17;
+    const minBY = 6;
+    const maxBY = 12;
+    randx = Math.floor(Math.random() * (maxBX - minBX + 1)) + minBX;
+    randy = Math.floor(Math.random() * (maxBY -minBY + 1)) + minBY;
+
+    if (isSolid(randx,randy)) {
+        return {xBob: randx, yBob: randy};
+    } 
+    return getRandomBobberSafeSpot();
 }
 
 // Options for Player Colors... these are in the same order as our sprite sheet
@@ -117,6 +131,7 @@ function getKeyString(x, y) {
     let playerRef;
     let players = {};
     let playerElements = {};
+    let playerBobberElements = {};
     let coins = {};
     let coinElements = {};
 
@@ -174,8 +189,16 @@ function getKeyString(x, y) {
     }
 
     function handleRod() {
+        let {xBob, yBob} = getRandomBobberSafeSpot()
+        // if (!players[playerId].rod){
+        //     xBob = players[playerId].x;
+        //     yBob = players[playerId].y;
+        // }
+
         playerRef.update({
-            rod: !players[playerId].rod
+            rod: !players[playerId].rod,
+            xBob,
+            yBob,
         })
     }
 
@@ -203,6 +226,7 @@ function getKeyString(x, y) {
             Object.keys(players).forEach((key) => {
                 const characterState = players[key];
                 let el = playerElements[key];
+                let Bel = playerBobberElements[key];
                 // Now update the DOM
                 el.querySelector(".Character_name").innerText = characterState.name;
                 el.querySelector(".Character_coins").innerText = characterState.coins;
@@ -210,11 +234,19 @@ function getKeyString(x, y) {
                 el.setAttribute("data-direction", characterState.direction);
                 const left = 16 * characterState.x + "px";
                 const top = 16 * characterState.y - 4 + "px";
+                const leftB = (16 * characterState.xBob + 4) + "px";
+                const topB = (16 * characterState.yBob + 4) + "px";
                 if (characterState.rod){
                     el.querySelector(".Character_rod").style.display = 'block';
+                    Bel.querySelector('.bobber').style.display = 'block';
+                    Bel.querySelector(".bobber").classList.add('animate');
                 } else {
                     el.querySelector(".Character_rod").style.display = 'none';
+                    Bel.querySelector('.bobber').style.display = 'none';
+                    Bel.querySelector(".bobber").classList.remove('animate');
                 }
+                Bel.querySelector(".bobber").style.left = leftB;
+                Bel.querySelector(".bobber").style.top = topB;
                 el.style.transform = `translate3d(${left}, ${top}, 0)`;
             })
 
@@ -240,7 +272,13 @@ function getKeyString(x, y) {
                 <div class="Character_rod"></div>
             `);
             
+            const bobberElement = document.createElement("div");
+            bobberElement.innerHTML = (`
+                <div class="bobber"></div>
+            `);
+
             playerElements[addedPlayer.id] = characterElement;
+            playerBobberElements[addedPlayer.id] = bobberElement;
 
             //Add Initial state
             characterElement.querySelector(".Character_name").innerText = addedPlayer.name;
@@ -250,13 +288,22 @@ function getKeyString(x, y) {
             //grid size = 16
             const left = 16 * addedPlayer.x + "px";
             const top = 16 * addedPlayer.y - 4 + "px";
+            const leftB = (16 * addedPlayer.xBob + 4)  + "px";
+            const topB = (16 * addedPlayer.yBob + 4 )  + "px";
             if (addedPlayer.rod){
                 characterElement.querySelector(".Character_rod").style.display = 'block';
+                bobberElement.querySelector('.bobber').style.display = 'block';
+                bobberElement.querySelector(".bobber").classList.add('animate');
             } else if (!(addedPlayer.rod))  {
                 characterElement.querySelector(".Character_rod").style.display = 'none';
+                bobberElement.querySelector('.bobber').style.display = 'none';
+                bobberElement.querySelector(".bobber").classList.remove('animate');
             }
+            bobberElement.querySelector(".bobber").style.left = leftB;
+            bobberElement.querySelector(".bobber").style.top = topB;
             characterElement.style.transform = `translate3d(${left}, ${top}, 0)`;
             gameContainer.appendChild(characterElement);
+            gameContainer.appendChild(bobberElement);
 
         })
         //Remove character DOM element after they leave
@@ -264,6 +311,8 @@ function getKeyString(x, y) {
             const removedKey = snapshot.val().id;
             gameContainer.removeChild(playerElements[removedKey]);
             delete playerElements[removedKey];
+            gameContainer.removeChild(playerBobberElements[removedKey]);
+            delete playerBobberElements[removedKey];
         })
 
     
@@ -345,6 +394,7 @@ function getKeyString(x, y) {
             playerNameInput.value = name;
             
             const {x, y} = getRandomSafeSpot();
+            
 
             playerRef.set({
                 id: playerId,
@@ -354,6 +404,8 @@ function getKeyString(x, y) {
                 rod: false,
                 x,
                 y,
+                xBob: x,
+                yBob: y,
                 coins: 0,
             })
 
