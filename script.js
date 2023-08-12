@@ -124,10 +124,11 @@ function getKeyString(x, y) {
     const playerNameInput = document.querySelector("#player-name");
     const playerColorButton = document.querySelector("#player-color");
 
-    const upbutton = document.getElementById("up key");
-    const leftbutton = document.getElementById("left key");
-    const rightbutton = document.getElementById("right key");
-    const downbutton = document.getElementById("down key");
+    const upButton = document.getElementById("up key");
+    const leftButton = document.getElementById("left key");
+    const rightButton = document.getElementById("right key");
+    const downButton = document.getElementById("down key");
+    const aButton = document.getElementById("A key");
 
     function placeCoin() {
         const { x, y } = getRandomSafeSpot();
@@ -172,17 +173,24 @@ function getKeyString(x, y) {
         }
     }
 
+    function handleRod() {
+        playerRef.update({
+            rod: !players[playerId].rod
+        })
+    }
+
     function initGame() {
         
         new KeyPressListener("ArrowUp", () => handleArrowPress(0, -1))
         new KeyPressListener("ArrowDown", () => handleArrowPress(0, 1))
         new KeyPressListener("ArrowLeft", () => handleArrowPress(-1, 0))
         new KeyPressListener("ArrowRight", () => handleArrowPress(1, 0))
+        new KeyPressListener("KeyA", () => handleRod())
 
-        upbutton.addEventListener("click", () => handleArrowPress(0, -1))
-        leftbutton.addEventListener("click", () => handleArrowPress(-1, 0))
-        rightbutton.addEventListener("click", () => handleArrowPress(1, 0))
-        downbutton.addEventListener("click", () => handleArrowPress(0, 1))
+        upButton.addEventListener("click", () => handleArrowPress(0, -1))
+        leftButton.addEventListener("click", () => handleArrowPress(-1, 0))
+        rightButton.addEventListener("click", () => handleArrowPress(1, 0))
+        downButton.addEventListener("click", () => handleArrowPress(0, 1))
         
 
         const allPlayersRef = firebase.database().ref(`players`);
@@ -202,6 +210,11 @@ function getKeyString(x, y) {
                 el.setAttribute("data-direction", characterState.direction);
                 const left = 16 * characterState.x + "px";
                 const top = 16 * characterState.y - 4 + "px";
+                if (characterState.rod){
+                    el.querySelector(".Character_rod").style.display = 'block';
+                } else {
+                    el.querySelector(".Character_rod").style.display = 'none';
+                }
                 el.style.transform = `translate3d(${left}, ${top}, 0)`;
             })
 
@@ -224,6 +237,7 @@ function getKeyString(x, y) {
                     <span class="Character_coins">0</span>
                 </div>
                 <div class="Character_you-arrow"></div>
+                <div class="Character_rod"></div>
             `);
             
             playerElements[addedPlayer.id] = characterElement;
@@ -236,6 +250,11 @@ function getKeyString(x, y) {
             //grid size = 16
             const left = 16 * addedPlayer.x + "px";
             const top = 16 * addedPlayer.y - 4 + "px";
+            if (addedPlayer.rod){
+                characterElement.querySelector(".Character_rod").style.display = 'block';
+            } else if (!(addedPlayer.rod))  {
+                characterElement.querySelector(".Character_rod").style.display = 'none';
+            }
             characterElement.style.transform = `translate3d(${left}, ${top}, 0)`;
             gameContainer.appendChild(characterElement);
 
@@ -247,8 +266,8 @@ function getKeyString(x, y) {
             delete playerElements[removedKey];
         })
 
-        //New - not in the video!
-    //This block will remove coins from local state when Firebase `coins` value updates
+    
+        //This block will remove coins from local state when Firebase `coins` value updates
         allCoinsRef.on("value", (snapshot) => {
             coins = snapshot.val() || {};
         });
@@ -303,6 +322,13 @@ function getKeyString(x, y) {
             })
         })
 
+
+        //Update player rod on button click
+        aButton.addEventListener("click", () => {
+            handleRod();
+        })
+
+
         //Place my first coin
         //placeCoin();
     }
@@ -325,6 +351,7 @@ function getKeyString(x, y) {
                 name,
                 direction: "right",
                 color: randomFromArray(playerColors),
+                rod: false,
                 x,
                 y,
                 coins: 0,

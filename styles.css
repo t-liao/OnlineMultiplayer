@@ -101,6 +101,20 @@
     background: url(images/arrow.png) no-repeat no-repeat;
   }
 
+  .Character_rod {
+    display: block;
+    position: absolute;
+    top: -3px;
+    left: 8px;
+    width: 16px;
+    height: 16px;
+    background: url(images/rod.png) no-repeat no-repeat;
+  }
+  .Character[data-direction="left"] .Character_rod {
+    transform: scaleX(-1);
+    left: -7px;
+  }
+
   /* nodged a bit above for floating */
   .Character_sprite {
     overflow: hidden;
@@ -187,6 +201,10 @@
   .right {
     margin-left: 25px;
     transform: rotate(90deg);
+  }
+
+  .A {
+    margin-left: 50px;
   }
 
   .LRkey {
