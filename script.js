@@ -191,8 +191,7 @@ function getKeyString(x, y) {
                 yBob: players[playerId].y,
             })
           }
-            
-
+          
           attemptGrabCoin(newX, newY);
         }
     }
