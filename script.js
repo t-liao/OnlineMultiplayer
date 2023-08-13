@@ -184,15 +184,26 @@ function getKeyString(x, y) {
             players[playerId].direction = "left";
           }
           playerRef.set(players[playerId]);
+          
+          if (!players[playerId].rod){
+            playerRef.update({
+                xBob: players[playerId].x,
+                yBob: players[playerId].y,
+            })
+          }
+            
+
           attemptGrabCoin(newX, newY);
         }
     }
 
     function handleRod() {
-        let {xBob, yBob} = getRandomBobberSafeSpot()
+        let {xBob, yBob} = getRandomBobberSafeSpot();
+    
         if (players[playerId].rod){
             xBob = players[playerId].x;
             yBob = players[playerId].y;
+            
         }
 
         playerRef.update({
